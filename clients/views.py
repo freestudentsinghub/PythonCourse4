@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, TemplateView
 from django.views.generic.edit import UpdateView, DeleteView, CreateView
-
+from clients.forms import ClientsForm
 from clients.models import Clients
 
 
@@ -26,11 +26,11 @@ class ClientsDeleteView(DeleteView):
 
 class ClientsUpdateView(UpdateView):
     model = Clients
-    fields = ('email', 'full_name', 'comment',)
+    form_class = ClientsForm
     success_url = reverse_lazy('clients:clients_list')
 
 
 class ClientsCreateView(CreateView):
     model = Clients
-    fields = ('email', 'full_name', 'comment',)
+    form_class = ClientsForm
     success_url = reverse_lazy('clients:clients_list')
