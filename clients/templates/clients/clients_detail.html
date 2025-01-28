@@ -1,0 +1,11 @@
+{% extends 'clients/base.html' %}
+{% block title %}Страница клиентов{% endblock %}
+{% block content %}
+<body>
+    <h1>Информация о клиенте</h1>
+    <p>Полное имя: {{ object.full_name }}</p>
+    <p>Почта: {{ object.email }}</p>
+    <p>Комментарий: {{ object.comment }}</p>
+    <a class="btn btn-primary" href="{% url 'clients:clients_list' %}" role="button">Назад</a>
+</body>
+{% endblock %}

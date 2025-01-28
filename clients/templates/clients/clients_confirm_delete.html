@@ -1,0 +1,22 @@
+{% extends 'clients/base.html' %}
+{% block title %}Удалить клиента{% endblock %}
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-6">
+            <form class="row" method="post" enctype="multipart/form-data">
+                <div class="card">
+                    <h4 class="card-text">Действительно хотите удалить клиента? <br> {{ object.full_name}}</h4>
+                    <div class="card-body">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger">
+                            Удалить
+                        </button>
+                        <a class="btn btn-success" href="{% url 'clients:clients_list' %}" role="button">Отмена</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

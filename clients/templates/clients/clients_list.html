@@ -1,0 +1,28 @@
+{% extends 'clients/base.html' %}
+
+{% block content %}
+<div class="container">
+    <div class="row text-center">
+        <a class="btn btn-primary margins" href="{% url 'clients:clients_create' %}" role="button">Создать</a>
+        {% for clients in object_list %}
+        <div class="col-3">
+            <div class="card mb-4 box-shadow">
+
+                <div class="card-header">
+                        <h4 class="my-0 font-weight-normal">{{ clients.full_name }}</h4>
+                        </div>
+                        <div class="card-body">
+                            <h1 class="card-title pricing-card-title">{{ clients.email }}</h1>
+                            <ul class="list-unstyled mt-3 mb-4 text-start m-3">
+                                <li>{{ clients.comment|truncatechars:100 }}</li>
+                            </ul>
+                            <a class="btn btn-info margins__buttons" href="{% url 'clients:clients_detail' clients.pk %}" role="button">Просмотреть</a>
+                            <a class="btn btn-danger margins__buttons" href="{% url 'clients:clients_delete' clients.pk %}" role="button">Удалить</a>
+                            <a class="btn btn-warning" href="{% url 'clients:clients_update' clients.pk %}" role="button">Редактировать</a>
+                        </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
