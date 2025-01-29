@@ -1,0 +1,13 @@
+{% extends 'mailings/base.html' %}
+{% block title %}Страница рассылки{% endblock %}
+{% block content %}
+<body>
+    <h1>Информация о рассылке</h1>
+    <p>Дата первой отправки: {{ object.first_sent_time }}</p>
+    <p>Дата окончания отправки: {{ object.end_time }}</p>
+    <p>Статус: {{ object.status }}</p>
+    <p>Сообщение: {{ object.message }}</p>
+    <p>Получатели: {{ object.recipients }}</p>
+    <a class="btn btn-primary" href="{% url 'mailings:campaign_list' %}" role="button">Назад</a>
+</body>
+{% endblock %}
