@@ -38,4 +38,25 @@ class Campaign(models.Model):
         ordering = ['-end_time']
 
 
+class CampaignAttempt(models.Model):
+    STATUS_CHOICES = [
+        ('status_ok', "Успешно"),
+        ('status_nok', "Не успешно"),
+    ]
+
+    date_attempt = models.DateTimeField(verbose_name="Дата и время попытки")
+    status = models.CharField(max_length=15, choices=STATUS_CHOICES, verbose_name="Статус попытки")
+    server_response = models.TextField(verbose_name="Ответ почтового сервера")
+    campaign = models.ForeignKey(Campaign, on_delete=models.CASCADE, verbose_name="Рассылка", related_name="campaign")
+
+    def __str__(self):
+        return f'{self.date_attempt} <{self.status}>'
+
+    class Meta:
+        verbose_name = "Попытка"
+        verbose_name_plural = "Попытки"
+        ordering = ["date_attempt", "status"]
+
+
+
 

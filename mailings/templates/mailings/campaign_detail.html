@@ -7,7 +7,7 @@
     <p>Дата окончания отправки: {{ object.end_time }}</p>
     <p>Статус: {{ object.status }}</p>
     <p>Сообщение: {{ object.message }}</p>
-    <p>Получатели: {{ object.recipients }}</p>
+    <p>Получатели: {{ object.recipients.all }}</p>
     <a class="btn btn-primary" href="{% url 'mailings:campaign_list' %}" role="button">Назад</a>
 </body>
 {% endblock %}

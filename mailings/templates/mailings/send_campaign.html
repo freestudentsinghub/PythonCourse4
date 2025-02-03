@@ -1,0 +1,25 @@
+{% extends 'mailings/base.html' %}
+{% block title %}Страница рассылки{% endblock %}
+{% block content %}
+<body>
+{% if campaign %}
+    <h1>Информация о рассылке</h1>
+    <p>Дата первой отправки: {{ campaign.first_sent_time }}</p>
+    <p>Дата окончания отправки: {{ campaign.end_time }}</p>
+    <p>Статус: {{ campaign.status }}</p>
+    <p>Сообщение: {{ campaign.message }}</p>
+    <!-- Отображение получателей -->
+    <p>Получатели:</p>
+    <ul>
+        {% for recipient in campaign.recipients.all %}
+        <li>{{ recipient.email }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Отправить</button>
+    </form>
+</body>
+{% endblock %}

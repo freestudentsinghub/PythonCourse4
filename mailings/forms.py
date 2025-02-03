@@ -1,7 +1,6 @@
 from django.forms import ModelForm
-
 from mailings.models import Message, Campaign
-
+from django import forms
 
 class MessageForm(ModelForm):
     class Meta:
@@ -58,4 +57,7 @@ class CampaignForm(ModelForm):
         })
 
 
-
+class SendCampaignForm(ModelForm):
+    class Meta:
+        model = Campaign
+        fields = ["message", "recipients",]
