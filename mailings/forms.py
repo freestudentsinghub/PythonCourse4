@@ -57,7 +57,3 @@ class CampaignForm(ModelForm):
         })
 
 
-class SendCampaignForm(ModelForm):
-    class Meta:
-        model = Campaign
-        fields = ["message", "recipients",]
