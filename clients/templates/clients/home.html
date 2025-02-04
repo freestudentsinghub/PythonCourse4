@@ -30,5 +30,42 @@
           </div>
         </div>
       </div>
-    </div>
+<div class="row">
+      <div class="margin__top col-sm-6 mb-3 mb-sm-0">
+        <div class="card">
+          <div class="card-body">
+              <ul>
+              <li>
+                <p>Создано рассылок: </p>
+                <span class="#">{{ count_campaign }}</span>
+              </li>
+              </ul>
+          </div>
+        </div>
+      </div>
+      <div class="margin__top col-sm-6 mb-3 mb-sm-0">
+        <div class="card">
+          <div class="card-body">
+              <ul>
+              <li>
+                <p>Количество активных рассылок: </p>
+                <span>{{ active_campaign_count }}</span>
+              </li>
+              </ul>
+          </div>
+        </div>
+      </div>
+      <div class="margin__top col-sm-6 mb-3 mb-sm-0">
+        <div class="card">
+          <div class="card-body">
+              <ul>
+              <li>
+                <p>Количество уникальных получателей: </p>
+                <span>{{ unique_clients_count }}</span>
+              </li>
+              </ul>
+          </div>
+        </div>
+      </div>
+</div>
 {% endblock %}
