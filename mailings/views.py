@@ -6,7 +6,7 @@ from django.views import View
 from django.views.generic import ListView, DetailView, TemplateView
 from django.views.generic.edit import UpdateView, DeleteView, CreateView
 from mailings.forms import MessageForm, CampaignForm
-from mailings.models import Message, Campaign
+from mailings.models import Message, Campaign, CampaignAttempt
 
 
 
@@ -16,7 +16,16 @@ class MessageListView(ListView):
 
 
 class HomeView(TemplateView):
-    template_name = "mailings/home.html"
+    template_name = "clients/home.html"
+
+    def get_context_data(self, **kwargs):
+        context_data = super().get_context_data(**kwargs)
+        context_data["title"] = "SkyMail"
+        context_data["count_campaign"] = Campaign.objects.count()
+        context_data["active_campaign_count"] = Campaign.objects.filter(status="Запущена").count()
+        unique_clients_count = Campaign.objects.values('recipients').distinct().count()
+        context_data["unique_clients_count"] = unique_clients_count
+        return context_data
 
 
 class MessageDetailView(DetailView):
