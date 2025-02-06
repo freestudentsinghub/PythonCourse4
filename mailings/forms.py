@@ -57,3 +57,7 @@ class CampaignForm(ModelForm):
         })
 
 
+class CampaignModeratorForm(ModelForm):
+    class Meta:
+        model = Campaign
+        fields = ["is_active"]

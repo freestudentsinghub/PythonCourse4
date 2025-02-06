@@ -1,6 +1,7 @@
-
+from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
 from django.shortcuts import get_object_or_404, redirect
+from django.urls import reverse
 
 from django.utils import timezone
 
@@ -40,3 +41,10 @@ def run_mailing(request, pk):
         campaign.status = 'completed'
     campaign.save()
     return redirect("mailings:campaign_list")
+
+@login_required
+def block_mailing(request, pk):
+    campaign = Campaign.objects.get(pk=pk)
+    campaign.is_active = {campaign.is_active: False, not campaign.is_active: True}[True]
+    campaign.save()
+    return redirect(reverse("mailing:campaign_list"))

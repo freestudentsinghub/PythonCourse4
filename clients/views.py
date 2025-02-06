@@ -1,3 +1,5 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.http import HttpResponseForbidden
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, TemplateView
@@ -7,9 +9,15 @@ from clients.models import Clients
 from mailings.models import Campaign
 
 
-class ClientsListView(ListView):
+class ClientsListView(LoginRequiredMixin, ListView):
     model = Clients
     template_name = 'clients/clients_list.html'
+
+    def dispatch(self, request, *args, **kwargs):
+        # Проверяем, имеет ли пользователь право на просмотр списка клиентов
+        if not request.user.has_perm('clients.view_clients'):
+            return HttpResponseForbidden("У вас нет прав для просмотра списка клиентов.")
+        return super().dispatch(request, *args, **kwargs)
 
 
 class HomeView(TemplateView):

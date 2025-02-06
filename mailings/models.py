@@ -27,6 +27,7 @@ class Campaign(models.Model):
     end_time = models.DateTimeField(verbose_name='Дата окончания отправки')
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='created', verbose_name='Статус')
     message = models.ForeignKey(Message, on_delete=models.CASCADE, verbose_name='Сообщение')
+    is_active = models.BooleanField(default=True, verbose_name="активна")
     recipients = models.ManyToManyField(Clients, verbose_name='Получатели')
 
     def __str__(self):
@@ -36,6 +37,9 @@ class Campaign(models.Model):
         verbose_name = 'Рассылка'
         verbose_name_plural = 'Рассылки'
         ordering = ['-end_time']
+        permissions = [
+            ("can_disable_mailing", "Can disable mailing"),
+        ]
 
 
 class CampaignAttempt(models.Model):

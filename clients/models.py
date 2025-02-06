@@ -15,5 +15,6 @@ class Clients(models.Model):
         verbose_name = 'Клиент'
         verbose_name_plural = 'Клиенты'
         ordering = ['email', 'full_name']
+        
 
 
