@@ -1,6 +1,7 @@
 from django.db import models
 
 from clients.models import Clients
+from users.models import CustomUser
 
 
 class Message(models.Model):
@@ -29,6 +30,10 @@ class Campaign(models.Model):
     message = models.ForeignKey(Message, on_delete=models.CASCADE, verbose_name='Сообщение')
     is_active = models.BooleanField(default=True, verbose_name="активна")
     recipients = models.ManyToManyField(Clients, verbose_name='Получатели')
+    successful_attempts = models.IntegerField(default=0)
+    unsuccessful_attempts = models.IntegerField(default=0)
+    sent_messages = models.IntegerField(default=0)
+    owner = models.ForeignKey(CustomUser, on_delete=models.CASCADE, blank=True, null=True)
 
     def __str__(self):
         return f'Рассылка {self.first_sent_time} - {self.status}'

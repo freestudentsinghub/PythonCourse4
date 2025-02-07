@@ -1,4 +1,5 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db.models import Sum
 from django.http import HttpResponseForbidden
 from django.shortcuts import render
 from django.urls import reverse_lazy
@@ -30,6 +31,14 @@ class HomeView(TemplateView):
         context_data["active_campaign_count"] = Campaign.objects.filter(status="started").count()
         unique_clients_count = Campaign.objects.values('recipients').distinct().count()
         context_data["unique_clients_count"] = unique_clients_count
+
+        user = self.request.user
+        user_campaigns = Campaign.objects.filter(owner=user)
+        context_data["total_successful_attempts"] = user_campaigns.aggregate(Sum('successful_attempts'))[
+                                                        'successful_attempts__sum'] or 0
+        context_data["total_unsuccessful_attempts"] = user_campaigns.aggregate(Sum('unsuccessful_attempts'))[
+                                                          'unsuccessful_attempts__sum'] or 0
+        context_data["total_sent_messages"] = user_campaigns.aggregate(Sum('sent_messages'))['sent_messages__sum'] or 0
         return context_data
 
 
