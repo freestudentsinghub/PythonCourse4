@@ -3,11 +3,12 @@ import secrets
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.http import HttpResponseForbidden
 from django.urls import reverse_lazy
-from django.views.generic import ListView
-from django.views.generic.edit import CreateView, UpdateView
+from django.utils.crypto import get_random_string
+from django.views.generic import ListView, TemplateView
+from django.views.generic.edit import CreateView, UpdateView, FormView
 
 from config.settings import EMAIL_HOST_USER
-from .forms import CustomUserCreationForm
+from .forms import CustomUserCreationForm, PasswordRecoveryForm
 from django.core.mail import send_mail
 
 from .models import CustomUser
@@ -46,3 +47,34 @@ class UsersListView(LoginRequiredMixin, ListView):
         return super().dispatch(request, *args, **kwargs)
 
 
+class EmailConfirmationView(TemplateView):
+    model = CustomUser
+    template_name = "users/email_confirmation.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["title"] = "Письмо активации отправлено"
+        return context
+
+
+class PasswordRecoveryView(FormView):
+    template_name = "users/password_recovery.html"
+    form_class = PasswordRecoveryForm
+    success_url = reverse_lazy("users:login")
+
+    def form_valid(self, form):
+        email = form.cleaned_data["email"]
+        user = CustomUser.objects.get(email=email)
+        length = 12
+        alphabet = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+        password = get_random_string(length, alphabet)
+        user.set_password(password)
+        user.save()
+        send_mail(
+            subject="Восстановление пароля",
+            message=f"Ваш новый пароль: {password}",
+            from_email=EMAIL_HOST_USER,
+            recipient_list=[user.email],
+            fail_silently=False,
+        )
+        return super().form_valid(form)
