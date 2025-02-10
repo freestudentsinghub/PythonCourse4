@@ -10,7 +10,7 @@ class Command(BaseCommand):
     help = "Отправка почтовых отправлений получателям"
 
     def handle(self, *args, **kwargs):
-        mailings = Campaign.objects.filter(status__in=['created', 'started'])
+        mailings = Campaign.objects.filter(status__in=["created", "started"])
         for campaign in mailings:
             for recipient in campaign.recipients.all():
                 try:
@@ -23,15 +23,17 @@ class Command(BaseCommand):
                     )
                     CampaignAttempt.objects.create(
                         date_attempt=timezone.now(),
-                        status='status_ok',
+                        status="status_ok",
                         server_response="Email отправлен",
                         campaign=campaign,
                     )
-                    print(f"Сообщение {campaign.message.topic} успешно отправлено на  {recipient.email}")
+                    print(
+                        f"Сообщение {campaign.message.topic} успешно отправлено на  {recipient.email}"
+                    )
                 except Exception as e:
                     CampaignAttempt.objects.create(
                         date_attempt=timezone.now(),
-                        status='status_nok',
+                        status="status_nok",
                         server_response=str(e),
                         campaign=campaign,
                     )

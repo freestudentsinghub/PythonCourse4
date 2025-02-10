@@ -6,12 +6,17 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('mailings', '0003_campaignattempt'),
+        ("mailings", "0003_campaignattempt"),
     ]
 
     operations = [
         migrations.AlterModelOptions(
-            name='campaign',
-            options={'ordering': ['-end_time'], 'permissions': [('can_disable_mailing', 'Can disable mailing')], 'verbose_name': 'Рассылка', 'verbose_name_plural': 'Рассылки'},
+            name="campaign",
+            options={
+                "ordering": ["-end_time"],
+                "permissions": [("can_disable_mailing", "Can disable mailing")],
+                "verbose_name": "Рассылка",
+                "verbose_name_plural": "Рассылки",
+            },
         ),
     ]

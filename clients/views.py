@@ -12,33 +12,56 @@ from mailings.models import Campaign
 
 class ClientsListView(LoginRequiredMixin, ListView):
     model = Clients
-    template_name = 'clients/clients_list.html'
+    template_name = "clients/clients_list.html"
 
     def dispatch(self, request, *args, **kwargs):
         # Проверяем, имеет ли пользователь право на просмотр списка клиентов
-        if not request.user.has_perm('clients.view_clients'):
-            return HttpResponseForbidden("У вас нет прав для просмотра списка клиентов.")
+        if not request.user.has_perm("clients.view_clients"):
+            return HttpResponseForbidden(
+                "У вас нет прав для просмотра списка клиентов."
+            )
         return super().dispatch(request, *args, **kwargs)
 
 
 class HomeView(TemplateView):
     template_name = "clients/home.html"
 
+    def dispatch(self, request, *args, **kwargs):
+        # Проверяем, авторизован ли пользователь
+        if not request.user.is_authenticated:
+            # Если не авторизован, возвращаем другой шаблон
+            return render(
+                request, "clients/home.html"
+            )  # Укажите путь к вашему шаблону для неавторизованных пользователей
+        return super().dispatch(request, *args, **kwargs)
+
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
         context_data["title"] = "SkyMail"
         context_data["count_campaign"] = Campaign.objects.count()
-        context_data["active_campaign_count"] = Campaign.objects.filter(status="started").count()
-        unique_clients_count = Campaign.objects.values('recipients').distinct().count()
+        context_data["active_campaign_count"] = Campaign.objects.filter(
+            status="started"
+        ).count()
+        unique_clients_count = Campaign.objects.values("recipients").distinct().count()
         context_data["unique_clients_count"] = unique_clients_count
 
         user = self.request.user
         user_campaigns = Campaign.objects.filter(owner=user)
-        context_data["total_successful_attempts"] = user_campaigns.aggregate(Sum('successful_attempts'))[
-                                                        'successful_attempts__sum'] or 0
-        context_data["total_unsuccessful_attempts"] = user_campaigns.aggregate(Sum('unsuccessful_attempts'))[
-                                                          'unsuccessful_attempts__sum'] or 0
-        context_data["total_sent_messages"] = user_campaigns.aggregate(Sum('sent_messages'))['sent_messages__sum'] or 0
+        context_data["total_successful_attempts"] = (
+            user_campaigns.aggregate(Sum("successful_attempts"))[
+                "successful_attempts__sum"
+            ]
+            or 0
+        )
+        context_data["total_unsuccessful_attempts"] = (
+            user_campaigns.aggregate(Sum("unsuccessful_attempts"))[
+                "unsuccessful_attempts__sum"
+            ]
+            or 0
+        )
+        context_data["total_sent_messages"] = (
+            user_campaigns.aggregate(Sum("sent_messages"))["sent_messages__sum"] or 0
+        )
         return context_data
 
 
@@ -48,16 +71,16 @@ class ClientsDetailView(DetailView):
 
 class ClientsDeleteView(DeleteView):
     model = Clients
-    success_url = reverse_lazy('clients:clients_list')
+    success_url = reverse_lazy("clients:clients_list")
 
 
 class ClientsUpdateView(UpdateView):
     model = Clients
     form_class = ClientsForm
-    success_url = reverse_lazy('clients:clients_list')
+    success_url = reverse_lazy("clients:clients_list")
 
 
 class ClientsCreateView(CreateView):
     model = Clients
     form_class = ClientsForm
-    success_url = reverse_lazy('clients:clients_list')
+    success_url = reverse_lazy("clients:clients_list")

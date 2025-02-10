@@ -6,23 +6,23 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('mailings', '0005_campaign_is_active'),
+        ("mailings", "0005_campaign_is_active"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='campaign',
-            name='sent_messages',
+            model_name="campaign",
+            name="sent_messages",
             field=models.IntegerField(default=0),
         ),
         migrations.AddField(
-            model_name='campaign',
-            name='successful_attempts',
+            model_name="campaign",
+            name="successful_attempts",
             field=models.IntegerField(default=0),
         ),
         migrations.AddField(
-            model_name='campaign',
-            name='unsuccessful_attempts',
+            model_name="campaign",
+            name="unsuccessful_attempts",
             field=models.IntegerField(default=0),
         ),
     ]

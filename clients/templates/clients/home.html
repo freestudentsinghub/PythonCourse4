@@ -1,6 +1,17 @@
 {% extends 'clients/base.html' %}
 
 {% block content %}
+<div class="row">
+    <div class="col-12">
+        <div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center mt-5">
+            {% if user.is_authenticated %}
+            <h2 class="row justify-content-center">Приветствуем Вас {{user.email}} на нашем сайте</h2>
+            {% else %}
+            <h2 class="row justify-content-center">Приветствуем Вас на нашем сайте</h2>
+            {% endif %}
+        </div>
+    </div>
+</div>
     {% if perms.mailings.view_campaign %}
     <div class="row">
       <div class="col-sm-6 mb-3 mb-sm-0">

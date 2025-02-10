@@ -7,25 +7,65 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('clients', '0001_initial'),
-        ('mailings', '0001_initial'),
+        ("clients", "0001_initial"),
+        ("mailings", "0001_initial"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Campaign',
+            name="Campaign",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('first_sent_time', models.DateTimeField(blank=True, null=True, verbose_name='Дата первой отправки')),
-                ('end_time', models.DateTimeField(verbose_name='Дата окончания отправки')),
-                ('status', models.CharField(choices=[('created', 'Создана'), ('started', 'Запущена'), ('completed', 'Завершена')], default='created', max_length=10, verbose_name='Статус')),
-                ('message', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='mailings.message', verbose_name='Сообщение')),
-                ('recipients', models.ManyToManyField(to='clients.clients', verbose_name='Получатели')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "first_sent_time",
+                    models.DateTimeField(
+                        blank=True, null=True, verbose_name="Дата первой отправки"
+                    ),
+                ),
+                (
+                    "end_time",
+                    models.DateTimeField(verbose_name="Дата окончания отправки"),
+                ),
+                (
+                    "status",
+                    models.CharField(
+                        choices=[
+                            ("created", "Создана"),
+                            ("started", "Запущена"),
+                            ("completed", "Завершена"),
+                        ],
+                        default="created",
+                        max_length=10,
+                        verbose_name="Статус",
+                    ),
+                ),
+                (
+                    "message",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="mailings.message",
+                        verbose_name="Сообщение",
+                    ),
+                ),
+                (
+                    "recipients",
+                    models.ManyToManyField(
+                        to="clients.clients", verbose_name="Получатели"
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'Рассылка',
-                'verbose_name_plural': 'Рассылки',
-                'ordering': ['-end_time'],
+                "verbose_name": "Рассылка",
+                "verbose_name_plural": "Рассылки",
+                "ordering": ["-end_time"],
             },
         ),
     ]

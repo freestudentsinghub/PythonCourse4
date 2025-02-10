@@ -6,12 +6,17 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('clients', '0001_initial'),
+        ("clients", "0001_initial"),
     ]
 
     operations = [
         migrations.AlterModelOptions(
-            name='clients',
-            options={'ordering': ['email', 'full_name'], 'permissions': [('can_bloc_clients', 'Can bloc clients')], 'verbose_name': 'Клиент', 'verbose_name_plural': 'Клиенты'},
+            name="clients",
+            options={
+                "ordering": ["email", "full_name"],
+                "permissions": [("can_bloc_clients", "Can bloc clients")],
+                "verbose_name": "Клиент",
+                "verbose_name_plural": "Клиенты",
+            },
         ),
     ]

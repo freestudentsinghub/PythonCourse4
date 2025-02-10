@@ -1,22 +1,18 @@
-from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.core.exceptions import PermissionDenied
-from django.core.mail import send_mass_mail
 from django.http import HttpResponseForbidden
-from django.shortcuts import render, redirect, get_object_or_404
-from django.urls import reverse_lazy, reverse
-from django.views import View
+from django.shortcuts import redirect
+from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, TemplateView
 from django.views.generic.edit import UpdateView, DeleteView, CreateView
 from mailings.forms import MessageForm, CampaignForm, CampaignModeratorForm
-from mailings.models import Message, Campaign, CampaignAttempt
-
+from mailings.models import Message, Campaign
+from mailings.services import get_campaign_from_cache
 
 
 class MessageListView(ListView):
     model = Message
-    template_name = 'mailings/message_list.html'
-
+    template_name = "mailings/message_list.html"
 
 
 class HomeView(TemplateView):
@@ -26,8 +22,10 @@ class HomeView(TemplateView):
         context_data = super().get_context_data(**kwargs)
         context_data["title"] = "SkyMail"
         context_data["count_campaign"] = Campaign.objects.count()
-        context_data["active_campaign_count"] = Campaign.objects.filter(status="Запущена").count()
-        unique_clients_count = Campaign.objects.values('recipients').distinct().count()
+        context_data["active_campaign_count"] = Campaign.objects.filter(
+            status="Запущена"
+        ).count()
+        unique_clients_count = Campaign.objects.values("recipients").distinct().count()
         context_data["unique_clients_count"] = unique_clients_count
         return context_data
 
@@ -38,32 +36,38 @@ class MessageDetailView(DetailView):
 
 class MessageDeleteView(DeleteView):
     model = Message
-    success_url = reverse_lazy('mailings:message_list')
+    success_url = reverse_lazy("mailings:message_list")
 
 
 class MessageUpdateView(UpdateView):
     model = Message
     form_class = MessageForm
-    success_url = reverse_lazy('mailings:message_list')
+    success_url = reverse_lazy("mailings:message_list")
 
 
 class MessageCreateView(CreateView):
     model = Message
     form_class = MessageForm
-    success_url = reverse_lazy('mailings:message_list')
+    success_url = reverse_lazy("mailings:message_list")
 
 
-#Рассылки
+# Рассылки
+
 
 class CampaignListView(ListView):
     model = Campaign
-    template_name = 'mailings/campaign_list.html'
+    template_name = "mailings/campaign_list.html"
 
     def dispatch(self, request, *args, **kwargs):
         # Проверяем, имеет ли пользователь право на просмотр списка клиентов
-        if not request.user.has_perm('mailings.view_campaign'):
-            return HttpResponseForbidden("У вас нет прав для просмотра списка рассылок.")
+        if not request.user.has_perm("mailings.view_campaign"):
+            return HttpResponseForbidden(
+                "У вас нет прав для просмотра списка рассылок."
+            )
         return super().dispatch(request, *args, **kwargs)
+
+    def get_queryset(self):
+        return get_campaign_from_cache()
 
 
 class CampaignDetailView(DetailView):
@@ -72,15 +76,15 @@ class CampaignDetailView(DetailView):
 
 class CampaignDeleteView(DeleteView):
     model = Campaign
-    success_url = reverse_lazy('mailings:campaign_list')
+    success_url = reverse_lazy("mailings:campaign_list")
 
 
 class CampaignUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
     model = Campaign
     form_class = CampaignForm
-    success_url = reverse_lazy('mailings:campaign_list')
+    success_url = reverse_lazy("mailings:campaign_list")
 
-    permission_required = 'mailings.can_disable_mailing'
+    permission_required = "mailings.can_disable_mailing"
 
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
@@ -106,6 +110,4 @@ class CampaignUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView
 class CampaignCreateView(CreateView):
     model = Campaign
     form_class = CampaignForm
-    success_url = reverse_lazy('mailings:campaign_list')
-
-
+    success_url = reverse_lazy("mailings:campaign_list")
