@@ -7,23 +7,55 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('mailings', '0002_campaign'),
+        ("mailings", "0002_campaign"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='CampaignAttempt',
+            name="CampaignAttempt",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('date_attempt', models.DateTimeField(verbose_name='Дата и время попытки')),
-                ('status', models.CharField(choices=[('status_ok', 'Успешно'), ('status_nok', 'Не успешно')], max_length=15, verbose_name='Статус попытки')),
-                ('server_response', models.TextField(verbose_name='Ответ почтового сервера')),
-                ('campaign', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='campaign', to='mailings.campaign', verbose_name='Рассылка')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "date_attempt",
+                    models.DateTimeField(verbose_name="Дата и время попытки"),
+                ),
+                (
+                    "status",
+                    models.CharField(
+                        choices=[
+                            ("status_ok", "Успешно"),
+                            ("status_nok", "Не успешно"),
+                        ],
+                        max_length=15,
+                        verbose_name="Статус попытки",
+                    ),
+                ),
+                (
+                    "server_response",
+                    models.TextField(verbose_name="Ответ почтового сервера"),
+                ),
+                (
+                    "campaign",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="campaign",
+                        to="mailings.campaign",
+                        verbose_name="Рассылка",
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'Попытка',
-                'verbose_name_plural': 'Попытки',
-                'ordering': ['date_attempt', 'status'],
+                "verbose_name": "Попытка",
+                "verbose_name_plural": "Попытки",
+                "ordering": ["date_attempt", "status"],
             },
         ),
     ]

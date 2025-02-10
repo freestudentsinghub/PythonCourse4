@@ -1,6 +1,18 @@
 {% extends 'clients/base.html' %}
 
 {% block content %}
+<div class="row">
+    <div class="col-12">
+        <div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center mt-5">
+            {% if user.is_authenticated %}
+            <h2 class="row justify-content-center">Приветствуем Вас {{user.email}} на нашем сайте</h2>
+            {% else %}
+            <h2 class="row justify-content-center">Приветствуем Вас на нашем сайте</h2>
+            {% endif %}
+        </div>
+    </div>
+</div>
+    {% if perms.mailings.view_campaign %}
     <div class="row">
       <div class="col-sm-6 mb-3 mb-sm-0">
         <div class="card">
@@ -11,6 +23,8 @@
           </div>
         </div>
       </div>
+    {% endif %}
+    {% if user.is_superuser %}
       <div class="col-sm-6">
         <div class="card">
           <div class="card-body">
@@ -21,6 +35,8 @@
         </div>
       </div>
     </div>
+    {% endif %}
+    {% if perms.clients.view_clients %}
     <div class="margin__top col-sm-5">
         <div class="card">
           <div class="card-body">
@@ -30,6 +46,19 @@
           </div>
         </div>
       </div>
+    {% endif %}
+    {% if perms.users.view_customuser %}
+    <div class="margin__top col-sm-5">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Список пользователей</h5>
+            <p class="card-text">Посмотреть всех пользователей</p>
+            <a href="{% url 'users:users_list' %}" class="btn btn-primary">Перейти</a>
+          </div>
+        </div>
+      </div>
+    {% endif %}
+{% if user.is_superuser %}
 <div class="row">
       <div class="margin__top col-sm-6 mb-3 mb-sm-0">
         <div class="card">
@@ -68,4 +97,25 @@
         </div>
       </div>
 </div>
+<div class="margin__top col-sm-6 mb-3 mb-sm-0">
+    <div class="card">
+        <div class="card-body">
+            <ul>
+                <li>
+                    <p>Количество успешных попыток рассылки: </p>
+                    <span>{{ total_successful_attempts }}</span>
+                </li>
+                <li>
+                    <p>Количество неуспешных попыток рассылки: </p>
+                    <span>{{ total_unsuccessful_attempts }}</span>
+                </li>
+                <li>
+                    <p>Общее количество отправленных сообщений: </p>
+                    <span>{{ total_sent_messages }}</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+{% endif %}
 {% endblock %}

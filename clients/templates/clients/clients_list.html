@@ -16,9 +16,11 @@
                             <ul class="list-unstyled mt-3 mb-4 text-start m-3">
                                 <li>{{ clients.comment|truncatechars:100 }}</li>
                             </ul>
+                            {% if user.is_superuser %}
                             <a class="btn btn-info margins__buttons" href="{% url 'clients:clients_detail' clients.pk %}" role="button">Просмотреть</a>
                             <a class="btn btn-danger margins__buttons" href="{% url 'clients:clients_delete' clients.pk %}" role="button">Удалить</a>
                             <a class="btn btn-warning" href="{% url 'clients:clients_update' clients.pk %}" role="button">Редактировать</a>
+                            {% endif %}
                         </div>
             </div>
         </div>
